@@ -1,18 +1,27 @@
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import './App.css'
+import CoffeeCart from './component/CoffeeCart';
+import { useState } from 'react';
 
 function App() {
 
+  const loadedCoffees = useLoaderData();
+  const [coffees, setCoffees] = useState(loadedCoffees);
+
   return (
-    <>
-      <h1 className='text-6xl text-cyan-600'>Coffee Store</h1>
-      <br />
-      <br />
-      <p>go to <Link to="/addcoffee">Add Coffee</Link></p>
-      <br />
-      <br />
-      <p>go to <Link to="/updatecoffee">Update Coffee</Link></p>
-    </>
+    <div className='m-20'>
+      <h1 className='text-6xl text-center my-20 text-purple-600'>Hot Hot Cold Coffee: {coffees.length}</h1>
+      <div className='grid md:grid-cols-2 gap-4'>
+        {
+          coffees.map(coffee => <CoffeeCart
+            key={coffee._id}
+            coffee={coffee}
+            coffees={coffees}
+            setCoffees={setCoffees}
+          ></CoffeeCart>)
+        }
+      </div>
+    </div>
   )
 }
 

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 
 const AddCoffee = () => {
 
-    const handleAddCoffee =event => {
+    const handleAddCoffee = event => {
         event.preventDefault();
 
         const form = event.target;
@@ -19,14 +20,35 @@ const AddCoffee = () => {
         const newCoffee = { name, quantity, supplier, taste, category, details, photo }
 
         console.log(newCoffee);
+
+        // send data to the server 
+        fetch('http://localhost:5000/coffee', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newCoffee)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.insertedId) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'User Added Successfully',
+                        icon: 'success',
+                        confirmButtonText: 'Cool'
+                    })
+                }
+            })
     }
 
     return (
         <div className="p-20" style={{ backgroundColor: " #F4F3F0" }}>
             <h3 className="text-6xl font-extrabold">Add coffee</h3>
-            
+
             <p>back to <Link to="/">Home</Link></p>
-            
+
             <form onSubmit={handleAddCoffee}>
                 {/* form name and quantity row */}
                 <div className="md:flex mb-8">
